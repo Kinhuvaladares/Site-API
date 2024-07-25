@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versão de Aplicações Tecsidel</title>
+    <style>
+ body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222; /* Fundo de tela preto */
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #434343; /* Fundo cinza chumbo */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            position: relative; /* Adicionado para posicionamento absoluto */
+        }
+        h1 {
+            text-align: center;
+            color: #fff; /* Letras/fontes brancas */
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: #333; /* Texto preto */
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #434343; /* Fundo cinza chumbo */
+            color: #fff; /* Letras/fontes brancas */
+        }
+        .update-form {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #000; /* Fundo branco */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 999;
+        }
+        .update-form.active {
+            display: block;
+        }
+        .update-form input, .update-form button {
+            padding: 10px;
+            margin-right: 10px;
+            background-color: #000; /* Botões em Preto */
+            color: #fff; /* Texto Branco */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .update-form button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            max-width: 200px;
+        }
+        .tab {
+    padding: 5px 10px;
+    margin: 3px;
+    background-color: #000; /* Fundo branco inicial */
+    color: #333; /* Texto preto */
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px; /* Tamanho da fonte das abas */
+    border: 1px solid transparent; /* Define uma borda inicial transparente */
+    transition: border-color 0.3s ease-in-out; /* Transição suave para a animação */
+}
+
+        .tab.selected {
+            background-color: #9c9c9c; /* Tom azul mais claro */
+            color: #333; /* Texto escuro para melhor contraste */
+        }
+        .tab-content {
+            display: none;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            background-color: #000; /* Fundo branco */
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .empty-state {
+            text-align: center;
+            margin-top: 20px;
+            color: #000; /* Texto preto */
+        }
+        .client-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .client-header h2 {
+            margin: 0;
+            flex-grow: 1;
+            cursor: pointer; /* Adicionado cursor pointer para o nome do cliente */
+            color: #000; /* Texto preto */
+        }
+        .client-actions {
+            display: flex;
+            gap: 10px; /* Espaço entre os botões */
+        }
+        .client-actions button {
+            background-color: #000; /* Cor branco padrão botoes renomear e excluir*/
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .client-content {
+            margin-top: 10px; /* Espaço entre o cabeçalho do cliente e o conteúdo */
+        }
+        .client-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .client-content th,
+.client-content td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    color: #333; /* Cor do texto padrão */
+}
+
+.client-content th:first-child,
+.client-content td:first-child {
+    color: #fff; /* Cor do texto branco para a primeira coluna (Aplicação) */
+}
+
+.client-content th:nth-child(2),
+.client-content td:nth-child(2) {
+    color: #fff; /* Cor do texto branco para a segunda coluna (Versão Atual) */
+}
+
+.client-content th:nth-child(3),
+.client-content td:nth-child(3) {
+    color: #fff; /* Cor do texto branco para a segunda coluna (Editar Versão) */
+}
+        .client-content td.actions {
+            white-space: nowrap; /* Evita que os botões quebrem a linha */
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #000;
+            font-size: 12px;
+        }
+        .main-content {
+            flex-grow: 1;
+            margin-right: 20px;
+            position: relative;
+        }
+        .sidebar {
+            max-width: 200px;
+            position: relative;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #000; /* Letras/fontes pretas */
+        }
+        .initial-screen-button {
+            position: absolute;
+            top: 0px; /* Ajuste de posição vertical */
+            left: 0px; /* Ajuste de posição horizontal */
+            background-color: #000; /* Botão preto */
+            color: #fff; /* Letras/fontes pretas */
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .zoom-buttons {
+            position: fixed;
+            top: 5px;
+            right: 5px;
+            z-index: 1000;
+        }
+        .zoom-buttons button {
+            background-color: #000;/* Letras/fontes pretas botoes + - */
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+					 
+							
+						 
+						
+						  
+		 
+.xml-button {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.xml-button button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-bottom: 5px; /* Espaçamento entre os botões */
+}
+
+		.zoom-buttons button:hover,
+		.xml-button button:hover {
+    animation: pulse-border 1s infinite; /* Aplica a animação de pulsação na borda ao passar o mouse */
+}
+/* Botões e abas que serão animados */
+.botao,
+.aba {
+    border: 1px solid transparent; /* Define uma borda inicial transparente */
+    transition: border-color 0.3s ease-in-out; /* Transição suave para a animação */
+    cursor: pointer; /* Cursor de mão ao passar o mouse */
+}
+
+/* Animação de borda pulsante ao passar o mouse */
+.botao:hover,
+.aba:hover,
+.save-button:hover {
+    animation: pulse-border-gradient 1s infinite; /* Aplica a animação de gradiente na borda */
+}
+
+/* Definição da animação de borda pulsante com gradiente */
+@keyframes pulse-border-gradient {
+    0% {
+        border-color: transparent;
+    }
+    25% {
+        border-color: #ffd700; /* Dourado */
+    }
+    50% {
+        border-color: #ffd700; /* Dourado */
+    }
+    75% {
+        border-color: #ffd700; /* Dourado */
+    }
+    100% {
+        border-color: #ffd700; /* Dourado */
+    }
+}
+
+/* Estilos para as abas */
+.tab {
+    padding: 5px 10px;
+    margin: 3px;
+	background-color: #000; /* Fundo preto */
+    color: #fff; /* Texto branco */
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px; /* Tamanho da fonte das abas */
+    border: 1px solid transparent; /* Define uma borda inicial transparente */
+    transition: border-color 0.3s ease-in-out; /* Transição suave para a animação */
+}
+
+/* Animação de borda pulsante com gradiente para abas */
+.tab:hover {
+    animation: pulse-border-gradient 1s infinite; /* Aplica a animação de gradiente na borda ao passar o mouse */
+}
+
+/* Estilo para aba selecionada */
+.tab.selected {
+    background-color: #fff; /* Tom azul mais claro */
+    color: #333; /* Texto escuro para melhor contraste */
+}
+ .edit-button {
+        background-color: #000; /* Altere para a cor desejada */
+        color: #fff; /* Texto branco */
+		border-radius: 5px; /* Arredondar os cantos do botão */
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+		#client-name {
+    border-radius: 5px; /* Arredondar os cantos da caixa de entrada */
+    padding: 3px; /* Ajuste do preenchimento se necessário */
+    border: 0px solid #ccc; /* Borda padrão, ajuste se necessário */
+}
+	.tab-text-input {
+    width: 98%;
+    height: 250px; /* Altura inicial do campo de texto */
+    resize: vertical; /* Permite redimensionar verticalmente */
+    margin-top: 30px;
+    padding: 10px;
+    font-size: 14px; /* Tamanho da fonte do campo de texto */
+}
+.add-client-button {
+    background-color: #000; /* Nova cor de fundo do botão */
+    color: #ffffff; /* Nova cor da fonte do botão */
+    border: 1px solid #222;
+    padding: 3px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add-client-button:hover {
+    background-color: #000; /* Cor do fundo ao passar o mouse */
+    color: #ffffff; /* Cor da fonte ao passar o mouse */
+}
+.save-button {
+    padding: 3px 10px;
+    margin: 10px 0;
+    background-color: #000; /* Cor de fundo  */
+    color: #fff; /* Cor do texto branca */
+    border: 1px solid #222;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s; /* Transição suave */
+}
+
+.save-button:hover {
+    background-color: #000; /* Cor do fundo ao passar o mouse */
+    color: #ffffff; /* Cor da fonte ao passar o mouse */
+	animation: pulse-border-gradient 1s infinite; /* Aplica a animação de gradiente na borda ao passar o mouse */
+}
+
+    </style>
+</head>
+<body>
+    <div class="zoom-buttons">
+        <button class="botao" onclick="zoomIn()">+</button>
+        <button class="botao" onclick="zoomOut()">-</button>
+    </div>
+    <div class="container">
+        <div class="main-content">
+            <h1>Versão de Aplicações Tecsidel</h1>
+            <div id="tab-contents"></div>
+            <div class="empty-state" id="empty-state">
+                <input type="text" id="client-name" placeholder="Nome do Cliente">
+                <button class="botao add-client-button" onclick="addClient()">Adicionar Novo Cliente</button>
+            </div>
+            <button class="initial-screen-button botao" onclick="showInitialScreen()">Tela Inicial</button>
+            <div class="update-form" id="update-form">
+                <input type="text" id="app-name" placeholder="Nome da Aplicação" disabled>
+                <input type="text" id="app-version" placeholder="Nova Versão">
+                <button class="botao" onclick="confirmUpdate()">OK</button>
+                <span class="close-button" onclick="closeUpdateForm()">X</span>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="tabs" id="tabs"></div>
+        </div>
+    </div>
+    <footer>
+        &copy; 2024 Marco Valadares
+    </footer>
+    <div class="xml-button">
+        <button class="botao" onclick="exportToXML()">Exportar XML</button>
+        <button class="botao" onclick="document.getElementById('xml-input').click()">Importar XML</button>
+        <input type="file" id="xml-input" accept=".xml" style="display: none;" onchange="importFromXML(event)">
+    </div>
+    <script>
+        let zoomLevel = 1;
+
+        function zoomIn() {
+            zoomLevel += 0.1;
+            applyZoom();
+        }
+
+        function zoomOut() {
+            zoomLevel -= 0.1;
+            applyZoom();
+        }
+
+        function applyZoom() {
+            document.querySelector('.container').style.transform = `scale(${zoomLevel})`;
+        }
+
+        let clients = JSON.parse(localStorage.getItem('clients')) || [];
+        let currentClientIndex = null;
+        let selectedTab = null;
+
+        function addClient() {
+            const clientNameInput = document.getElementById('client-name');
+            const clientName = clientNameInput.value.trim();
+            if (clientName && clients.length < 100) {
+                clients.push({
+                    name: clientName,
+                    versions: {
+                        'HostMng': '1.0.0',
+                        'Backoffice N3': '3.0.0',
+                        'PlazaMng': '2.0.0',
+                        'Backoffice N2': '1.0.0',
+                        'Lanecomms': '1.0.0',
+                        'Via': '1.0.0',
+                    },
+                });
+                localStorage.setItem('clients', JSON.stringify(clients));
+                renderTabs();
+                clientNameInput.value = '';
+                document.getElementById('empty-state').style.display = 'none';
+            } else {
+                alert('Por favor, insira um nome de cliente válido.');
+            }
+        }
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('tabs');
+            tabsContainer.innerHTML = '';
+            clients.sort((a, b) => a.name.localeCompare(b.name));
+            clients.forEach((client, index) => {
+                const tab = document.createElement('div');
+                tab.classList.add('tab');
+                tab.textContent = client.name;
+                tab.addEventListener('click', () => {
+                    if (selectedTab === tab) {
+                        showInitialScreen();
+                        selectedTab.classList.remove('selected');
+                        selectedTab = null;
+                    } else {
+                        currentClientIndex = index;
+                        renderTabContents();
+                        if (selectedTab) {
+                            selectedTab.classList.remove('selected');
+                        }
+                        tab.classList.add('selected');
+                        selectedTab = tab;
+                    }
+                });
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+function renderTabContents() {
+    const tabContentsContainer = document.getElementById('tab-contents');
+    tabContentsContainer.innerHTML = '';
+
+    if (currentClientIndex !== null) {
+        const client = clients[currentClientIndex];
+
+        const clientHeader = document.createElement('div');
+        clientHeader.classList.add('client-header');
+        clientHeader.innerHTML = `
+            <h2>${client.name}</h2>
+            <div class="client-actions">
+                <button class="botao" onclick="editClientName()">Renomear</button>
+                <button class="botao" onclick="deleteClient()">Excluir</button>
+            </div>
+        `;
+        clientHeader.addEventListener('click', () => {
+            showClientContent();
+        });
+        tabContentsContainer.appendChild(clientHeader);
+
+        const clientContent = document.createElement('div');
+        clientContent.classList.add('client-content');
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+            <tr>
+                <th>Aplicação</th>
+                <th>Versão Atual</th>
+                <th>Editar Versão</th>
+            </tr>
+        `;
+        table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        for (const app in client.versions) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${app}</td>
+                <td>${client.versions[app]}</td>
+                <td class="actions">
+                    <button class="botao edit-button" onclick="updateVersion('${app}', '${client.versions[app]}')">Editar</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        }
+        table.appendChild(tbody);
+        clientContent.appendChild(table);
+        tabContentsContainer.appendChild(clientContent);
+
+        // Adicionar campo de texto abaixo da tabela de versões
+        const textInput = document.createElement('textarea');
+        textInput.placeholder = 'Digite até 10000 caracteres';
+        textInput.maxLength = 10000;
+        textInput.classList.add('tab-text-input');
+        textInput.value = client.userInput || ''; // Preenche com o valor salvo, se existir
+        tabContentsContainer.appendChild(textInput);
+
+// Adicionar botão para salvar
+const saveButton = document.createElement('button');
+saveButton.textContent = 'Salvar';
+saveButton.classList.add('save-button'); // Adiciona a nova classe CSS ao botão
+saveButton.onclick = () => {
+    saveTextInput(textInput.value); // Chama a função para salvar o texto digitado
+};
+tabContentsContainer.appendChild(saveButton);
+    }
+
+    document.getElementById('empty-state').style.display = 'none'; // Oculta o estado vazio quando há clientes
+}
+function saveTextInput(text) {
+    // Salva o texto digitado no objeto do cliente
+    if (currentClientIndex !== null) {
+        clients[currentClientIndex].userInput = text;
+
+        // Salva os clientes atualizados no localStorage
+        localStorage.setItem('clients', JSON.stringify(clients));
+
+        // Atualiza o estado da interface
+        alert('Texto salvo com sucesso!');
+    }
+}function createOrUpdateTab(client) {
+    const tabContentsContainer = document.getElementById('tab-contents-container');
+    tabContentsContainer.innerHTML = ''; // Limpa o conteúdo da aba
+
+    const clientContent = document.createElement('div');
+    clientContent.classList.add('tab-content');
+
+    // Criação da tabela de versões
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
+
+    // Adicionar linhas na tabela
+    for (const [app, version] of Object.entries(client.versions)) {
+        const row = document.createElement('tr');
+        const appCell = document.createElement('td');
+        const versionCell = document.createElement('td');
+        
+        appCell.textContent = app;
+        versionCell.textContent = version;
+
+        row.appendChild(appCell);
+        row.appendChild(versionCell);
+        tbody.appendChild(row);
+    }
+    table.appendChild(tbody);
+    clientContent.appendChild(table);
+    tabContentsContainer.appendChild(clientContent);
+
+    // Adicionar campo de texto abaixo da tabela de versões
+    const textInput = document.createElement('textarea');
+    textInput.placeholder = 'Digite até 1000 caracteres';
+    textInput.maxLength = 1000;
+    textInput.classList.add('tab-text-input');
+
+    // Preenche o campo de texto com o valor salvo, se existir
+    textInput.value = client.userInput || '';
+
+    tabContentsContainer.appendChild(textInput);
+
+    // Adicionar botão para salvar
+    const saveButton = document.createElement('button');
+    saveButton.textContent = 'Salvar';
+    saveButton.classList.add('botao');
+    saveButton.onclick = () => {
+        saveTextInput(textInput.value, client); // Atualizado para passar o cliente atual
+    };
+    tabContentsContainer.appendChild(saveButton);
+
+    document.getElementById('empty-state').style.display = 'none'; // Oculta o estado vazio quando há clientes
+}
+
+
+        function showClientContent() {
+            const clientContent = document.querySelector('.client-content');
+            if (clientContent) {
+                clientContent.classList.toggle('active');
+            }
+        }
+
+        function editClientName() {
+            const newName = prompt('Digite o novo nome do cliente:');
+            if (newName) {
+                clients[currentClientIndex].name = newName;
+                localStorage.setItem('clients', JSON.stringify(clients));
+                renderTabs();
+                renderTabContents();
+            }
+        }
+
+        function deleteClient() {
+            if (confirm('Tem certeza que deseja excluir este cliente?')) {
+                clients.splice(currentClientIndex, 1);
+                localStorage.setItem('clients', JSON.stringify(clients));
+                currentClientIndex = null;
+                renderTabs();
+                renderTabContents();
+                showInitialScreen();
+            }
+        }
+
+        function updateVersion(appName, currentVersion) {
+            const newVersion = prompt(`Digite a nova versão para ${appName}:`, currentVersion);
+            if (newVersion) {
+                clients[currentClientIndex].versions[appName] = newVersion;
+                localStorage.setItem('clients', JSON.stringify(clients));
+                renderTabContents();
+            }
+        }
+
+        function showInitialScreen() {
+            const tabContentsContainer = document.getElementById('tab-contents');
+            tabContentsContainer.innerHTML = '';
+
+            const emptyState = document.getElementById('empty-state');
+            emptyState.style.display = 'block';
+        }
+
+        function closeUpdateForm() {
+            document.getElementById('update-form').classList.remove('active');
+        }
+
+        function confirmUpdate() {
+            const appNameInput = document.getElementById('app-name');
+            const appVersionInput = document.getElementById('app-version');
+            if (appNameInput.value && appVersionInput.value) {
+                updateVersion(appNameInput.value, appVersionInput.value);
+                closeUpdateForm();
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+		
+		function formatXML(xmlString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
+    const serializer = new XMLSerializer();
+    const formattedXMLString = serializer.serializeToString(xmlDoc)
+        .replace(/(>)(<)(\/*)/g, '$1\n$2$3') // Adiciona quebras de linha entre tags
+        .replace(/(<\w+)(.*?)(\/>)/g, '$1$2\n$3'); // Adiciona nova linha após tags auto-fechadas
+
+    return formattedXMLString;
+}
+
+function exportToXML() {
+    const xmlDocument = document.implementation.createDocument('', '', null);
+    const rootElement = xmlDocument.createElement('ClientsData');
+    xmlDocument.appendChild(rootElement);
+
+    clients.forEach(client => {
+        const clientElement = xmlDocument.createElement('Client');
+        clientElement.setAttribute('name', client.name);
+
+        const versionsElement = xmlDocument.createElement('Versions');
+        Object.entries(client.versions).forEach(([app, version]) => {
+            const versionElement = xmlDocument.createElement('Version');
+            versionElement.setAttribute('app', app);
+            versionElement.textContent = version;
+            versionsElement.appendChild(versionElement);
+        });
+        clientElement.appendChild(versionsElement);
+
+        if (client.userInput) {
+            const userInputElement = xmlDocument.createElement('UserInput');
+            userInputElement.textContent = client.userInput;
+            clientElement.appendChild(userInputElement);
+        }
+
+        rootElement.appendChild(clientElement);
+    });
+
+    const xmlString = new XMLSerializer().serializeToString(xmlDocument);
+    const formattedXMLString = formatXML(xmlString);
+
+    const blob = new Blob([formattedXMLString], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'clientsData.xml';
+    document.body.appendChild(link); // Adiciona o link ao DOM
+    link.click();
+    document.body.removeChild(link); // Remove o link do DOM
+    URL.revokeObjectURL(url);
+}
+
+        function importFromXML(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(e.target.result, 'application/xml');
+                    const clientsData = [];
+
+                    const clientElements = xmlDoc.getElementsByTagName('Client');
+                    for (const clientElement of clientElements) {
+                        const clientName = clientElement.getAttribute('name');
+                        const versions = {};
+                        const versionElements = clientElement.getElementsByTagName('Version');
+                        for (const versionElement of versionElements) {
+                            const app = versionElement.getAttribute('app');
+                            const version = versionElement.textContent;
+                            versions[app] = version;
+                        }
+                        const userInputElement = clientElement.getElementsByTagName('UserInput')[0];
+                        const userInput = userInputElement ? userInputElement.textContent : '';
+
+                        clientsData.push({ name: clientName, versions, userInput });
+                    }
+
+                    clients = clientsData;
+                    localStorage.setItem('clients', JSON.stringify(clients));
+                    renderTabs();
+                    renderTabContents();
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            if (!clients.length) {
+                showInitialScreen();
+            }
+        });
+    </script>
+</body>
+</html>

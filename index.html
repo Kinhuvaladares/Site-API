@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('novo-pedagio.jpg'); /* Substitua pela URL da sua imagem */
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; /* Evita que a página role ao mover os botões */
+        }
+
+        .btn-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .btn {
+            padding: 15px 30px; /* Aumenta o tamanho dos botões */
+            font-size: 18px; /* Aumenta a fonte */
+            cursor: pointer;
+            border: none;
+            border-radius: 8px; /* Bordas mais arredondadas */
+            background-color: #007bff; /* Cor do botão Claro */
+            color: #fff;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: absolute;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05); /* Aumenta o botão ao passar o mouse */
+        }
+
+        #btn-claro {
+            top: 0px; /* Posição do botão Claro */
+            left: 0px; /* Posição do botão Claro */
+        }
+
+        #btn-escuro {
+            top: 0px; /* Posição do botão Escuro */
+            right: 0px; /* Posição do botão Escuro */
+            background-color: #000080; /* Cor do botão Escuro */
+        }
+
+        #btn-escuro:hover {
+            background-color: #000080;
+        }
+
+    </style>
+    <script>
+        function loadFromURL() {
+            var params = new URLSearchParams(window.location.search);
+            var arquivo = params.get('arquivo');
+            if (arquivo) {
+                loadLocalHTML(arquivo);
+            }
+        }
+
+        function loadLocalHTML(filename) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', filename, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById('conteudo').innerHTML = xhr.responseText;
+                    } else {
+                        console.error('Error loading HTML:', xhr.status);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        window.onload = function() {
+            loadFromURL(); // Carrega o conteúdo baseado nos parâmetros da URL ao carregar a página
+
+            // Atualiza o conteúdo ao mudar a URL
+            window.onpopstate = function() {
+                loadFromURL();
+            };
+        };
+
+        function alterarURL(arquivo) {
+            var novoUrl = 'file:///' + arquivo;
+            window.location.href = novoUrl;
+            loadLocalHTML(arquivo);
+        }
+    </script>
+</head>
+<body>
+    <div class="btn-container">
+        <!-- Botões para alterar a URL -->
+        <button id="btn-claro" class="btn" onclick="alterarURL('site_teste2_blue.html')">Claro</button>
+        <button id="btn-escuro" class="btn" onclick="alterarURL('site_teste2.html')">Escuro</button>
+    </div>
+
+    <!-- Conteúdo que será carregado dinamicamente -->
+    <div id="conteudo">
+        <!-- Conteúdo dos arquivos HTML será carregado aqui -->
+    </div>
+</body>
+</html>
