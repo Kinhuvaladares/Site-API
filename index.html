@@ -41,32 +41,43 @@
         }
 
         #btn-claro {
-            top: 20px; /* Posição do botão Claro */
-            left: 20px; /* Posição do botão Claro */
+            top: 0px; /* Posição do botão Claro */
+            left: 0px; /* Posição do botão Claro */
         }
 
         #btn-escuro {
-            top: 20px; /* Posição do botão Escuro */
-            right: 20px; /* Posição do botão Escuro */
+            top: 0px; /* Posição do botão Escuro */
+            right: 0px; /* Posição do botão Escuro */
             background-color: #000080; /* Cor do botão Escuro */
         }
 
         #btn-escuro:hover {
-            background-color: #000066;
+            background-color: #000080;
         }
 
-        #conteudo {
-            margin-top: 70px; /* Ajuste para evitar sobreposição com botões */
-        }
     </style>
     <script>
+        function loadFromURL() {
+            var params = new URLSearchParams(window.location.search);
+            var arquivo = params.get('arquivo');
+            if (arquivo) {
+                loadLocalHTML(arquivo);
+            }
+        }
+
         function loadLocalHTML(filename) {
-            fetch(filename)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('conteudo').innerHTML = data;
-                })
-                .catch(error => console.error('Erro ao carregar HTML:', error));
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', filename, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById('conteudo').innerHTML = xhr.responseText;
+                    } else {
+                        console.error('Error loading HTML:', xhr.status);
+                    }
+                }
+            };
+            xhr.send();
         }
 
         window.onload = function() {
@@ -79,21 +90,9 @@
         };
 
         function alterarURL(arquivo) {
-            // Atualiza a URL do navegador sem recarregar a página
-            var novaUrl = new URL(window.location.href);
-            novaUrl.searchParams.set('arquivo', arquivo);
-            window.history.pushState({}, '', novaUrl);
-            
-            // Carrega o conteúdo do arquivo
+            var novoUrl = arquivo;
+            window.location.href = novoUrl;
             loadLocalHTML(arquivo);
-        }
-
-        function loadFromURL() {
-            var params = new URLSearchParams(window.location.search);
-            var arquivo = params.get('arquivo');
-            if (arquivo) {
-                loadLocalHTML(arquivo);
-            }
         }
     </script>
 </head>
