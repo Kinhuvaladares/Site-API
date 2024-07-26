@@ -207,45 +207,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .zoom-buttons {
-            position: fixed;
-            top: 5px;
-            right: 5px;
-            z-index: 1000;
-        }
-        .zoom-buttons button {
-            background-color: #2196f3;/* Letras/fontes pretas botoes + - */
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-.xml-button {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-}
 
-.xml-button button {
-    background-color: #2196f3;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-bottom: 5px; /* Espaçamento entre os botões */
-}
-
-		.zoom-buttons button:hover,
-		.xml-button button:hover {
-    animation: pulse-border 1s infinite; /* Aplica a animação de pulsação na borda ao passar o mouse */
-}
 /* Botões e abas que serão animados */
 .botao,
 .aba {
@@ -256,7 +218,8 @@
 
 /* Animação de borda pulsante ao passar o mouse */
 .botao:hover,
-.aba:hover {
+.aba:hover, 
+.save-button:hover {					
     animation: pulse-border-gradient 1s infinite; /* Aplica a animação de gradiente na borda */
 }
 
@@ -352,13 +315,41 @@
     color: #ffffff; /* Cor da fonte ao passar o mouse */
 	animation: pulse-border-gradient 1s infinite; /* Aplica a animação de gradiente na borda ao passar o mouse */
 }
+.xml-buttons-top button {
+    background-color: #2196f3; /* Cor de fundo preta */
+    color: #fff; /* Cor do texto branco */
+    border: 1px solid #transparent; /* Borda preta, similar aos outros botões */
+    padding: 3px 6px; /* Espaçamento interno */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de mão ao passar o mouse */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transições suaves */
+}
+
+.xml-buttons-top button:hover {
+    background-color: #2196f3; /* Cor de fundo ao passar o mouse */
+    color: #fff; /* Cor do texto ao passar o mouse */
+    animation: pulse-border-gradient 1s infinite; /* Animação de borda */
+}
+
+.xml-buttons-top {
+    display: flex;
+    gap: 10px; /* Espaço entre os botões */
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}						 
     </style>
 </head>
 <body>
-    <div class="zoom-buttons">
-        <button class="botao" onclick="zoomIn()">+</button>
-        <button class="botao" onclick="zoomOut()">-</button>
-    </div>
+							  
+														   
+															
+<div class="xml-buttons-top">
+    <button class="botao" onclick="exportToXML()">Exportar XML</button>
+    <button class="botao" onclick="document.getElementById('xml-input').click()">Importar XML</button>
+    <input type="file" id="xml-input" accept=".xml" style="display: none;" onchange="importFromXML(event)">
+</div>
     <div class="container">
         <div class="main-content">
             <h1>Versão de Aplicações Tecsidel</h1>
@@ -382,28 +373,7 @@
     <footer>
         &copy; 2024 Marco Valadares
     </footer>
-    <div class="xml-button">
-        <button class="botao" onclick="exportToXML()">Exportar XML</button>
-        <button class="botao" onclick="document.getElementById('xml-input').click()">Importar XML</button>
-        <input type="file" id="xml-input" accept=".xml" style="display: none;" onchange="importFromXML(event)">
-    </div>
     <script>
-        let zoomLevel = 1;
-
-        function zoomIn() {
-            zoomLevel += 0.1;
-            applyZoom();
-        }
-
-        function zoomOut() {
-            zoomLevel -= 0.1;
-            applyZoom();
-        }
-
-        function applyZoom() {
-            document.querySelector('.container').style.transform = `scale(${zoomLevel})`;
-        }
-
         let clients = JSON.parse(localStorage.getItem('clients')) || [];
         let currentClientIndex = null;
         let selectedTab = null;
@@ -516,14 +486,14 @@ function renderTabContents() {
         textInput.value = client.userInput || ''; // Preenche com o valor salvo, se existir
         tabContentsContainer.appendChild(textInput);
 
-        // Adicionar botão para salvar
-        const saveButton = document.createElement('button');
-        saveButton.textContent = 'Salvar';
-		saveButton.classList.add('save-button'); // Adiciona a nova classe CSS ao botão
-        saveButton.onclick = () => {
-            saveTextInput(textInput.value); // Chama a função para salvar o texto digitado
-        };
-        tabContentsContainer.appendChild(saveButton);
+// Adicionar botão para salvar
+const saveButton = document.createElement('button');
+saveButton.textContent = 'Salvar';
+saveButton.classList.add('save-button'); // Adiciona a nova classe CSS ao botão
+saveButton.onclick = () => {
+    saveTextInput(textInput.value); // Chama a função para salvar o texto digitado
+};
+tabContentsContainer.appendChild(saveButton);
     }
 
     document.getElementById('empty-state').style.display = 'none'; // Oculta o estado vazio quando há clientes
