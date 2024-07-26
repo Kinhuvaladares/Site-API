@@ -13,22 +13,23 @@
             padding: 20px;
             margin: 0;
             height: 100vh;
-            overflow: hidden; /* Evita que a página role ao mover os botões */
+            overflow: hidden;
         }
 
         .btn-container {
             position: relative;
             width: 100%;
             height: 100%;
+            display: none; /* Esconde os botões inicialmente */
         }
 
         .btn {
-            padding: 15px 30px; /* Aumenta o tamanho dos botões */
-            font-size: 18px; /* Aumenta a fonte */
+            padding: 15px 30px;
+            font-size: 18px;
             cursor: pointer;
             border: none;
-            border-radius: 8px; /* Bordas mais arredondadas */
-            background-color: #007bff; /* Cor do botão Claro */
+            border-radius: 8px;
+            background-color: #007bff;
             color: #fff;
             transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -37,30 +38,90 @@
 
         .btn:hover {
             background-color: #0056b3;
-            transform: scale(1.05); /* Aumenta o botão ao passar o mouse */
+            transform: scale(1.05);
         }
 
         #btn-claro {
-            top: 20px; /* Posição do botão Claro */
-            left: 20px; /* Posição do botão Claro */
+            top: 20px;
+            left: 20px;
         }
 
         #btn-escuro {
-            top: 20px; /* Posição do botão Escuro */
-            right: 20px; /* Posição do botão Escuro */
-            background-color: #000080; /* Cor do botão Escuro */
+            top: 20px;
+            right: 20px;
+            background-color: #000080;
         }
 
         #btn-escuro:hover {
             background-color: #000066;
         }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-form input {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .login-form button {
+            padding: 10px;
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-form button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
+    <div id="login" class="login-container">
+        <div class="login-form">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Usuário" required>
+            <input type="password" id="password" placeholder="Senha" required>
+            <button onclick="checkLogin()">Entrar</button>
+        </div>
+    </div>
+
     <div class="btn-container">
-        <!-- Botões para navegar para outras páginas -->
         <button id="btn-claro" class="btn" onclick="window.location.href='site_teste2_blue.html'">Claro</button>
         <button id="btn-escuro" class="btn" onclick="window.location.href='site_teste2.html'">Escuro</button>
     </div>
+
+    <script>
+        function checkLogin() {
+            // Aqui você pode adicionar a lógica para verificar o usuário e senha
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // Simulação de verificação de login
+            if (username === 'admin' && password === 'admin') {
+                document.getElementById('login').style.display = 'none';
+                document.querySelector('.btn-container').style.display = 'block';
+            } else {
+                alert('Usuário ou senha incorretos.');
+            }
+        }
+    </script>
 </body>
 </html>
