@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versão de Aplicações Tecsidel</title>
+    <style>
+        :root {
+            --font-size: 14px;
+            --modal-width: 90%;
+            --modal-height: 80%;
+            --checkbox-size: 10px;
+            --button-bg-dark: #000;
+            --button-bg-light: #2196f3;
+            --button-color-dark: #fff;
+            --button-color-light: #fff;
+            --background-dark: #222;
+            --background-light: #d0e8f2;
+            --text-dark: #333;
+            --text-light: #fff;
+            --header-bg-dark: #555;
+            --header-bg-light: #2196f3;
+            --header-text-light: #fff;
+            --header-text-dark: #333;
+            --tab-bg-dark: #000;
+            --tab-bg-light: #2196f3;
+            --tab-text-light: #fff;
+            --tab-text-dark: #fff;
+            --client-header-bg-dark: #333;
+            --client-header-bg-light: #e0f7fa;
+            --client-header-border-dark: #666;
+            --client-header-border-light: #ccc;
+            --even-row-bg-dark: #333;
+            --even-row-bg-light: #e0f7fa;
+            --border-color-dark: #666;
+            --border-color-light: #ccc;
+            --hover-border-dark: #ffd700;
+            --hover-border-light: #1e88e5;
+        }
+
+        body {
+            font-size: var(--font-size);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-dark);
+            color: var(--text-light);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: var(--background-dark);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            border-radius: 10px;
+            border: 1px solid var(--border-color-dark);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-light);
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: var(--text-dark);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color-dark);
+            background-color: var(--background-dark); /* Ensure all cells have the background color */
+        }
+
+        th {
+            background-color: var(--header-bg-dark);
+            color: var(--header-text-light);
+            transition: background-color 0.3s;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--even-row-bg-dark);
+        }
+
+        .update-form {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: var(--background-dark);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 999;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .update-form.active {
+            display: block;
+        }
+
+        .update-form input, .update-form button {
+            padding: 10px;
+            margin-right: 10px;
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border: 1px solid var(--border-color-dark);
+            border-radius: 5px;
+            font-size: var(--font-size);
+        }
+
+        .update-form button {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border: none;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            max-width: 200px;
+        }
+
+        .tab {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: var(--tab-bg-dark);
+            color: var(--tab-text-dark);
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: var(--font-size);
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        .tab.selected {
+            background-color: #9c9c9c;
+            color: #333;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 10px;
+            border: 1px solid var(--border-color-dark);
+            margin-top: 10px;
+            background-color: var(--background-dark);
+            border-radius: 10px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-dark);
+        }
+
+        .client-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background-color: var(--client-header-bg-dark);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid var(--client-header-border-dark);
+            border-radius: 10px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .client-header h2 {
+            margin: 0;
+            flex-grow: 1;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        .client-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .client-actions button {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .client-content {
+            margin-top: 10px;
+        }
+
+        .client-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .client-content th,
+        .client-content td {
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color-dark);
+            text-align: left;
+            color: var(--text-light);
+            background-color: var(--background-dark);
+        }
+
+        .client-content th:first-child,
+        .client-content td:first-child {
+            color: var(--text-light);
+        }
+
+        .client-content th:nth-child(2),
+        .client-content td:nth-child(2) {
+            color: var(--text-light);
+        }
+
+        .client-content th:nth-child(3),
+        .client-content td:nth-child(3) {
+            color: var(--text-light);
+        }
+
+        .client-content th:nth-child(4),
+        .client-content td:nth-child(4) {
+            color: var(--text-light);
+        }
+
+        .client-content td.actions {
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-dark);
+            font-size: 12px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            margin-right: 20px;
+            position: relative;
+        }
+
+        .sidebar {
+            max-width: 200px;
+            position: relative;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        .initial-screen-button {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border: 1px solid var(--border-color-dark);
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .botao,
+        .aba {
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .botao:hover,
+        .aba:hover,
+        .save-button:hover,
+        .client-actions button:hover,
+        .initial-screen-button:hover,
+        .xml-buttons-top button:hover {
+            border-color: var(--hover-border-dark);
+        }
+
+        @keyframes pulse-border-gradient {
+            0% {
+                border-color: transparent;
+            }
+            25% {
+                border-color: var(--hover-border-dark);
+            }
+            50% {
+                border-color: var(--hover-border-dark);
+            }
+            75% {
+                border-color: var(--hover-border-dark);
+            }
+            100% {
+                border-color: var(--hover-border-dark);
+            }
+        }
+
+        .tab {
+            padding: 5px 10px;
+            margin: 3px;
+            background-color: var(--tab-bg-dark);
+            color: var(--tab-text-dark);
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: var(--font-size);
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        .tab:hover {
+            border-color: var(--hover-border-dark);
+        }
+
+        .tab.selected {
+            background-color: #fff;
+            color: #333;
+        }
+
+        .edit-button,
+        .replicate-button {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border-radius: 5px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            font-size: var(--font-size);
+        }
+
+        .edit-button.disabled,
+        .replicate-button.disabled {
+            display: none;
+        }
+
+        #client-name {
+            border-radius: 5px;
+            padding: 3px;
+            border: 0px solid #ccc;
+            font-size: var(--font-size);
+        }
+
+        .tab-text-input {
+            width: 98%;
+            height: 250px;
+            resize: vertical;
+            margin-top: 30px;
+            padding: 10px;
+            font-size: var(--font-size);
+            border-radius: 10px;
+            background-color: var(--background-dark);
+            color: var(--text-light);
+            border: 1px solid var(--border-color-dark);
+        }
+
+        .add-client-button {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border: 1px solid var(--border-color-dark);
+            padding: 3px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: var(--font-size);
+        }
+
+        .add-client-button:hover {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+        }
+
+        .save-button {
+            padding: 3px 10px;
+            margin: 10px 0;
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border: 1px solid var(--border-color-dark);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: var(--font-size);
+        }
+
+        .save-button:hover {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border-color: var(--hover-border-dark);
+        }
+
+        .xml-buttons-top button {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border: 1px solid var(--border-color-dark);
+            padding: 3px 6px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: var(--font-size);
+        }
+
+        .xml-buttons-top button:hover {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border-color: var(--hover-border-dark);
+        }
+
+        .xml-buttons-top {
+            display: flex;
+            gap: 10px;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mode-toggle {
+            background-color: transparent;
+            border: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .mode-toggle input {
+            display: none;
+        }
+
+        .mode-toggle label {
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            background-color: #ccc;
+            border-radius: 24px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .mode-toggle label::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .mode-toggle input:checked + label {
+            background-color: var(--button-bg-light);
+        }
+
+        .mode-toggle input:checked + label::before {
+            transform: translateX(26px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--background-dark);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-radius: 10px;
+            max-width: var(--modal-width);
+            max-height: var(--modal-height);
+            overflow-y: auto;
+            font-size: var(--font-size);
+            transition: background-color 0.3s;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+
+        .close-modal {
+            background-color: var(--button-bg-dark);
+            color: var(--button-color-dark);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: var(--font-size);
+        }
+
+        .application-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .application-checkboxes .checkbox {
+            background-color: #d3d3d3;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: var(--font-size);
+        }
+
+        .client-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .client-checkboxes .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: var(--font-size);
+        }
+
+        .edit-options {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+
+        input[type="checkbox"] {
+            width: var(--checkbox-size);
+            height: var(--checkbox-size);
+        }
+    </style>
+</head>
+<body>
+<div class="xml-buttons-top">
+    <button class="botao" onclick="exportToXML()">Exportar XML</button>
+    <button class="botao" onclick="document.getElementById('xml-input').click()">Importar XML</button>
+    <input type="file" id="xml-input" accept=".xml" style="display: none;" onchange="importFromXML(event)">
+</div>
+<div class="container">
+    <div class="main-content">
+        <h1>Versão de Aplicações Tecsidel</h1>
+        <div id="edit-options-container" class="edit-options" style="display: none;">
+            <input type="checkbox" id="toggle-buttons" onclick="toggleButtons()"> Habilitar Edição
+        </div>
+        <div id="tab-contents"></div>
+        <div class="empty-state" id="empty-state">
+            <input type="text" id="client-name" placeholder="Nome do Cliente">
+            <button class="botao add-client-button" onclick="addClient()">Adicionar Novo Cliente</button>
+        </div>
+        <button class="initial-screen-button botao" onclick="showInitialScreen()">Tela Inicial</button>
+        <div class="update-form" id="update-form">
+            <input type="text" id="app-name" placeholder="Nome da Aplicação" disabled>
+            <input type="text" id="app-version" placeholder="Nova Versão">
+            <button class="botao" onclick="confirmUpdate()">OK</button>
+            <span class="close-button" onclick="closeUpdateForm()">X</span>
+        </div>
+    </div>
+    <div class="sidebar">
+        <div class="tabs" id="tabs"></div>
+    </div>
+</div>
+<footer>
+    &copy; 2024 Marco Valadares
+</footer>
+
+<div class="modal" id="replicate-modal">
+    <div class="modal-header">
+        <h2>Replicar Versões</h2>
+        <button class="close-modal" onclick="toggleReplicateModal()">X</button>
+    </div>
+    <div class="modal-body">
+        <div id="replicate-options" class="application-checkboxes"></div>
+        <div id="client-selection" class="client-checkboxes"></div>
+    </div>
+    <div class="modal-footer">
+        <button class="botao" onclick="confirmReplication()">Replicar</button>
+    </div>
+</div>
+
+<div class="mode-toggle">
+    <input type="checkbox" id="toggle-mode" onclick="toggleMode()">
+    <label for="toggle-mode"></label>
+</div>
+
+<script>
+    let clients = JSON.parse(localStorage.getItem('clients')) || [];
+    let currentClientIndex = null;
+    let selectedTab = null;
+    let replicateAppName = null;
+
+    function addClient() {
+        const clientNameInput = document.getElementById('client-name');
+        const clientName = clientNameInput.value.trim();
+        if (clientName && clients.length < 100) {
+            clients.push({
+                name: clientName,
+                versions: {
+                    'HostMng': { current: '1.0.0', final: '' },
+                    'Backoffice N3': { current: '3.0.0', final: '' },
+                    'PlazaMng': { current: '2.0.0', final: '' },
+                    'Backoffice N2': { current: '1.0.0', final: '' },
+                    'Lanecomms': { current: '1.0.0', final: '' },
+                    'Via': { current: '1.0.0', final: '' },
+                },
+            });
+            localStorage.setItem('clients', JSON.stringify(clients));
+            renderTabs();
+            clientNameInput.value = '';
+            document.getElementById('empty-state').style.display = 'none';
+        } else {
+            alert('Por favor, insira um nome de cliente válido.');
+        }
+    }
+
+    function renderTabs() {
+        const tabsContainer = document.getElementById('tabs');
+        tabsContainer.innerHTML = '';
+        clients.sort((a, b) => a.name.localeCompare(b.name));
+        clients.forEach((client, index) => {
+            const tab = document.createElement('div');
+            tab.classList.add('tab');
+            tab.textContent = client.name;
+            tab.addEventListener('click', () => {
+                if (selectedTab === tab) {
+                    showInitialScreen();
+                    selectedTab.classList.remove('selected');
+                    selectedTab = null;
+                } else {
+                    currentClientIndex = index;
+                    renderTabContents();
+                    if (selectedTab) {
+                        selectedTab.classList.remove('selected');
+                    }
+                    tab.classList.add('selected');
+                    selectedTab = tab;
+                }
+            });
+            tabsContainer.appendChild(tab);
+        });
+    }
+
+    function renderTabContents() {
+        const tabContentsContainer = document.getElementById('tab-contents');
+        tabContentsContainer.innerHTML = '';
+
+        if (currentClientIndex !== null) {
+            const client = clients[currentClientIndex];
+
+            const clientHeader = document.createElement('div');
+            clientHeader.classList.add('client-header');
+            clientHeader.innerHTML = `
+                <h2>${client.name}</h2>
+                <div class="client-actions">
+                    <button class="botao" onclick="editClientName()">Renomear</button>
+                    <button class="botao" onclick="deleteClient()">Excluir</button>
+                </div>
+            `;
+            clientHeader.addEventListener('click', () => {
+                showClientContent();
+            });
+            tabContentsContainer.appendChild(clientHeader);
+
+            const clientContent = document.createElement('div');
+            clientContent.classList.add('client-content');
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th>Aplicação</th>
+                    <th>Versão Final</th>
+                    <th>Versão Atual</th>
+                    <th class="edit-column">Ações</th>
+                </tr>
+            `;
+            table.appendChild(thead);
+            const tbody = document.createElement('tbody');
+            for (const app in client.versions) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${app}</td>
+                    <td>${client.versions[app].final}</td>
+                    <td>${client.versions[app].current}</td>
+                    <td class="actions edit-column">
+                        <button class="botao edit-button" onclick="updateVersion('${app}', 'current')">Editar Atual</button>
+                        <button class="botao edit-button" onclick="updateVersion('${app}', 'final')">Editar Final</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            }
+            table.appendChild(tbody);
+            clientContent.appendChild(table);
+            tabContentsContainer.appendChild(clientContent);
+
+            // Adicionar botão de replicar ao lado do primeiro botão "Editar Final"
+            const firstEditFinalButton = clientContent.querySelector('.edit-button:nth-of-type(2)');
+            if (firstEditFinalButton) {
+                const replicateButton = document.createElement('button');
+                replicateButton.textContent = 'Replicar';
+                replicateButton.classList.add('botao', 'replicate-button');
+                replicateButton.style.display = 'none';
+                replicateButton.onclick = () => toggleReplicateModal();
+                firstEditFinalButton.parentElement.appendChild(replicateButton);
+            }
+
+            // Adicionar campo de texto abaixo da tabela de versões
+            const textInput = document.createElement('textarea');
+            textInput.placeholder = 'Digite até 10000 caracteres';
+            textInput.maxLength = 10000;
+            textInput.classList.add('tab-text-input');
+            textInput.value = client.userInput || ''; // Preenche com o valor salvo, se existir
+            tabContentsContainer.appendChild(textInput);
+
+            // Adicionar botão para salvar
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'Salvar';
+            saveButton.classList.add('save-button'); // Adiciona a nova classe CSS ao botão
+            saveButton.onclick = () => {
+                saveTextInput(textInput.value); // Chama a função para salvar o texto digitado
+            };
+            tabContentsContainer.appendChild(saveButton);
+
+            // Exibir a opção de habilitar edição
+            document.getElementById('edit-options-container').style.display = 'flex';
+        }
+
+        document.getElementById('empty-state').style.display = 'none'; // Oculta o estado vazio quando há clientes
+        toggleButtons(false); // Desabilitar edição inicialmente
+    }
+
+    function toggleReplicateModal() {
+        const modal = document.getElementById('replicate-modal');
+        modal.classList.toggle('active');
+        if (modal.classList.contains('active')) {
+            const clientSelectionContainer = document.getElementById('client-selection');
+            clientSelectionContainer.innerHTML = '';
+            clients.forEach((client, index) => {
+                if (index !== currentClientIndex) { // Excluir o cliente atual da lista
+                    const option = document.createElement('div');
+                    option.classList.add('checkbox');
+                    option.innerHTML = `
+                        <input type="checkbox" id="client-${index}" value="${index}">
+                        <label for="client-${index}">${client.name}</label>
+                    `;
+                    clientSelectionContainer.appendChild(option);
+                }
+            });
+
+            const replicateOptionsContainer = document.getElementById('replicate-options');
+            replicateOptionsContainer.innerHTML = '';
+            const client = clients[currentClientIndex];
+            Object.keys(client.versions).forEach(app => {
+                const option = document.createElement('div');
+                option.classList.add('checkbox');
+                option.innerHTML = `
+                    <input type="checkbox" id="app-${app}" value="${app}">
+                    <label for="app-${app}">${app}</label>
+                `;
+                replicateOptionsContainer.appendChild(option);
+            });
+        }
+    }
+
+    function confirmReplication() {
+        const selectedClientsCheckboxes = document.querySelectorAll('#client-selection input[type="checkbox"]:checked');
+        const selectedClients = Array.from(selectedClientsCheckboxes).map(cb => parseInt(cb.value));
+        const selectedAppsCheckboxes = document.querySelectorAll('#replicate-options input[type="checkbox"]:checked');
+        const selectedApps = Array.from(selectedAppsCheckboxes).map(cb => cb.value);
+
+        selectedClients.forEach(clientIndex => {
+            selectedApps.forEach(appName => {
+                clients[clientIndex].versions[appName].final = clients[currentClientIndex].versions[appName].final;
+            });
+        });
+        localStorage.setItem('clients', JSON.stringify(clients));
+        toggleReplicateModal();
+        renderTabContents();
+    }
+
+    function toggleButtons(toggle = true) {
+        const isChecked = toggle ? document.getElementById('toggle-buttons').checked : false;
+        const columns = document.querySelectorAll('.edit-column');
+        columns.forEach(column => {
+            column.style.display = isChecked ? '' : 'none';
+        });
+        const replicateButton = document.querySelector('.replicate-button');
+        if (replicateButton) {
+            replicateButton.style.display = isChecked ? 'inline-block' : 'none';
+        }
+    }
+
+    function saveTextInput(text) {
+        if (currentClientIndex !== null) {
+            clients[currentClientIndex].userInput = text;
+            localStorage.setItem('clients', JSON.stringify(clients));
+            alert('Texto salvo com sucesso!');
+        }
+    }
+
+    function showClientContent() {
+        const clientContent = document.querySelector('.client-content');
+        if (clientContent) {
+            clientContent.classList.toggle('active');
+        }
+    }
+
+    function editClientName() {
+        const newName = prompt('Digite o novo nome do cliente:');
+        if (newName) {
+            clients[currentClientIndex].name = newName;
+            localStorage.setItem('clients', JSON.stringify(clients));
+            renderTabs();
+            renderTabContents();
+        }
+    }
+
+    function deleteClient() {
+        if (confirm('Tem certeza que deseja excluir este cliente?')) {
+            clients.splice(currentClientIndex, 1);
+            localStorage.setItem('clients', JSON.stringify(clients));
+            currentClientIndex = null;
+            renderTabs();
+            renderTabContents();
+            showInitialScreen();
+        }
+    }
+
+    function updateVersion(appName, versionType) {
+        const client = clients[currentClientIndex];
+        const currentVersion = client.versions[appName][versionType];
+        const newVersion = prompt(`Digite a nova versão para ${appName}:`, currentVersion);
+        if (newVersion) {
+            client.versions[appName][versionType] = newVersion;
+            localStorage.setItem('clients', JSON.stringify(clients));
+            renderTabContents();
+        }
+    }
+
+    function showInitialScreen() {
+        const tabContentsContainer = document.getElementById('tab-contents');
+        tabContentsContainer.innerHTML = '';
+
+        const emptyState = document.getElementById('empty-state');
+        emptyState.style.display = 'block';
+
+        // Ocultar a opção de habilitar edição
+        document.getElementById('edit-options-container').style.display = 'none';
+    }
+
+    function closeUpdateForm() {
+        document.getElementById('update-form').classList.remove('active');
+    }
+
+    function confirmUpdate() {
+        const appNameInput = document.getElementById('app-name');
+        const appVersionInput = document.getElementById('app-version');
+        if (appNameInput.value && appVersionInput.value) {
+            updateVersion(appNameInput.value, appVersionInput.value);
+            closeUpdateForm();
+        } else {
+            alert('Por favor, preencha todos os campos.');
+        }
+    }
+
+    function formatXML(xmlString) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
+        const serializer = new XMLSerializer();
+        const formattedXMLString = serializer.serializeToString(xmlDoc)
+            .replace(/(>)(<)(\/*)/g, '$1\n$2$3') // Adiciona quebras de linha entre tags
+            .replace(/(<\w+)(.*?)(\/>)/g, '$1$2\n$3'); // Adiciona nova linha após tags auto-fechadas
+
+        return formattedXMLString;
+    }
+
+    function exportToXML() {
+        const xmlDocument = document.implementation.createDocument('', '', null);
+        const rootElement = xmlDocument.createElement('ClientsData');
+        xmlDocument.appendChild(rootElement);
+
+        clients.forEach(client => {
+            const clientElement = xmlDocument.createElement('Client');
+            clientElement.setAttribute('name', client.name);
+
+            const versionsElement = xmlDocument.createElement('Versions');
+            Object.entries(client.versions).forEach(([app, version]) => {
+                const versionElement = xmlDocument.createElement('Version');
+                versionElement.setAttribute('app', app);
+                versionElement.setAttribute('current', version.current);
+                versionElement.setAttribute('final', version.final);
+                versionsElement.appendChild(versionElement);
+            });
+            clientElement.appendChild(versionsElement);
+
+            if (client.userInput) {
+                const userInputElement = xmlDocument.createElement('UserInput');
+                userInputElement.textContent = client.userInput;
+                clientElement.appendChild(userInputElement);
+            }
+
+            rootElement.appendChild(clientElement);
+        });
+
+        const xmlString = new XMLSerializer().serializeToString(xmlDocument);
+        const formattedXMLString = formatXML(xmlString);
+
+        const blob = new Blob([formattedXMLString], { type: 'application/xml' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'clientsData.xml';
+        document.body.appendChild(link); // Adiciona o link ao DOM
+        link.click();
+        document.body.removeChild(link); // Remove o link do DOM
+        URL.revokeObjectURL(url);
+    }
+
+    function importFromXML(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(e.target.result, 'application/xml');
+                const clientsData = [];
+
+                const clientElements = xmlDoc.getElementsByTagName('Client');
+                for (const clientElement of clientElements) {
+                    const clientName = clientElement.getAttribute('name');
+                    const versions = {};
+                    const versionElements = clientElement.getElementsByTagName('Version');
+                    for (const versionElement of versionElements) {
+                        const app = versionElement.getAttribute('app');
+                        const current = versionElement.getAttribute('current');
+                        const final = versionElement.getAttribute('final');
+                        versions[app] = { current, final };
+                    }
+                    const userInputElement = clientElement.getElementsByTagName('UserInput')[0];
+                    const userInput = userInputElement ? userInputElement.textContent : '';
+
+                    clientsData.push({ name: clientName, versions, userInput });
+                }
+
+                clients = clientsData;
+                localStorage.setItem('clients', JSON.stringify(clients));
+                renderTabs();
+                renderTabContents();
+            };
+            reader.readAsText(file);
+        }
+    }
+
+    function toggleMode() {
+        const root = document.documentElement;
+        const currentBgColor = getComputedStyle(root).getPropertyValue('--background-dark').trim();
+
+        if (currentBgColor === '#222') {
+            root.style.setProperty('--background-dark', '#d0e8f2');
+            root.style.setProperty('--text-light', '#333');
+            root.style.setProperty('--button-bg-dark', '#2196f3');
+            root.style.setProperty('--header-bg-dark', '#2196f3');
+            root.style.setProperty('--header-text-light', '#fff');
+            root.style.setProperty('--client-header-bg-dark', '#e0f7fa');
+            root.style.setProperty('--client-header-border-dark', '#ccc');
+            root.style.setProperty('--tab-bg-dark', '#2196f3');
+            root.style.setProperty('--tab-text-dark', '#fff');
+            root.style.setProperty('--even-row-bg-dark', '#e0f7fa');
+            root.style.setProperty('--border-color-dark', '#ccc');
+            root.style.setProperty('--hover-border-dark', '#1e88e5');
+        } else {
+            root.style.setProperty('--background-dark', '#222');
+            root.style.setProperty('--text-light', '#fff');
+            root.style.setProperty('--button-bg-dark', '#000');
+            root.style.setProperty('--header-bg-dark', '#555');
+            root.style.setProperty('--header-text-light', '#fff');
+            root.style.setProperty('--client-header-bg-dark', '#333');
+            root.style.setProperty('--client-header-border-dark', '#666');
+            root.style.setProperty('--tab-bg-dark', '#000');
+            root.style.setProperty('--tab-text-dark', '#fff');
+            root.style.setProperty('--even-row-bg-dark', '#333');
+            root.style.setProperty('--border-color-dark', '#666');
+            root.style.setProperty('--hover-border-dark', '#ffd700');
+        }
+
+        // Alterna os estilos dos botões
+        document.querySelectorAll('.botao, .add-client-button, .save-button, .xml-buttons-top button, .close-modal').forEach(button => {
+            button.style.backgroundColor = getComputedStyle(root).getPropertyValue('--button-bg-dark');
+            button.style.color = getComputedStyle(root).getPropertyValue('--button-color-dark');
+            button.style.borderColor = getComputedStyle(root).getPropertyValue('--border-color-dark');
+        });
+
+        // Alterna os estilos do texto
+        document.querySelectorAll('th, td, .client-header h2').forEach(text => {
+            text.style.color = getComputedStyle(root).getPropertyValue('--text-light');
+            text.style.borderColor = getComputedStyle(root).getPropertyValue('--border-color-dark');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderTabs();
+        if (!clients.length) {
+            showInitialScreen();
+        }
+    });
+</script>
+</body>
+</html>
