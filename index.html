@@ -68,6 +68,8 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box; /* Garante que padding e border são incluídos nas dimensões totais */
+            width: 300px; /* Ajusta a largura da caixa */
         }
 
         .login-form input {
@@ -76,6 +78,7 @@
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box; /* Garante que padding e border são incluídos nas dimensões totais */
         }
 
         .login-form button {
@@ -102,12 +105,6 @@
             <button onclick="checkLogin()">Entrar</button>
         </div>
     </div>
-
-    <div class="btn-container">
-        <button id="btn-claro" class="btn" onclick="window.location.href='site_teste2_blue.html'">Claro</button>
-        <button id="btn-escuro" class="btn" onclick="window.location.href='site_teste2.html'">Escuro</button>
-    </div>
-
     <script>
         function checkLogin() {
             // Aqui você pode adicionar a lógica para verificar o usuário e senha
@@ -116,12 +113,18 @@
 
             // Simulação de verificação de login
             if (username === 'admin' && password === 'admin') {
-                document.getElementById('login').style.display = 'none';
-                document.querySelector('.btn-container').style.display = 'block';
+                window.location.href = 'TecsidelAPI.html'; // Redireciona para a página desejada
             } else {
                 alert('Usuário ou senha incorretos.');
             }
         }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Evita o comportamento padrão do Enter
+                checkLogin(); // Chama a função de login
+            }
+        });
     </script>
 </body>
 </html>
