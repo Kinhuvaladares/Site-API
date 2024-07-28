@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Versão de Aplicações Tecsidel</title>
     <style>
+        :root {
+            --font-size: 14px;
+            --modal-width: 80%;
+            --modal-height: 70%;
+            --checkbox-size: 10px;
+        }
+
         body {
+            font-size: var(--font-size);
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -79,6 +87,7 @@
             color: #fff;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: var(--font-size);
         }
 
         .update-form button {
@@ -103,7 +112,7 @@
             color: #fff;
             cursor: pointer;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: var(--font-size);
             border: 1px solid transparent;
             transition: border-color 0.3s ease-in-out;
             text-align: center;
@@ -306,6 +315,7 @@
             color: #fff;
             border-radius: 5px;
             transition: background-color 0.3s ease, border-color 0.3s ease;
+            
         }
 
         .edit-button.disabled,
@@ -317,6 +327,7 @@
             border-radius: 5px;
             padding: 3px;
             border: 0px solid #ccc;
+            
         }
 
         .tab-text-input {
@@ -325,7 +336,7 @@
             resize: vertical;
             margin-top: 30px;
             padding: 10px;
-            font-size: 14px;
+            font-size: var(--font-size);
             border-radius: 10px;
         }
 
@@ -337,6 +348,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: var(--font-size);
         }
 
         .add-client-button:hover {
@@ -353,6 +365,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.3s;
+            font-size: var(--font-size);
         }
 
         .save-button:hover {
@@ -369,6 +382,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: var(--font-size);
         }
 
         .xml-buttons-top button:hover {
@@ -397,7 +411,10 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             border-radius: 10px;
-            max-width: 90%;
+            max-width: var(--modal-width);
+            max-height: var(--modal-height);
+            overflow-y: auto;
+            font-size: var(--font-size);
         }
 
         .modal.active {
@@ -430,12 +447,37 @@
             padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: var(--font-size);
         }
 
-        .client-content .checkbox {
+        .application-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .application-checkboxes .checkbox {
+            background-color: #d3d3d3;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: var(--font-size);
+        }
+
+        .client-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .client-checkboxes .checkbox {
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: var(--font-size);
         }
 
         .edit-options {
@@ -443,6 +485,11 @@
             align-items: center;
             margin-bottom: 10px;
             color: #fff;
+        }
+
+        input[type="checkbox"] {
+            width: var(--checkbox-size);
+            height: var(--checkbox-size);
         }
     </style>
 </head>
@@ -455,7 +502,7 @@
 <div class="container">
     <div class="main-content">
         <h1>Versão de Aplicações Tecsidel</h1>
-        <div class="edit-options">
+        <div id="edit-options-container" class="edit-options" style="display: none;">
             <input type="checkbox" id="toggle-buttons" onclick="toggleButtons()"> Habilitar Edição
         </div>
         <div id="tab-contents"></div>
@@ -481,11 +528,12 @@
 
 <div class="modal" id="replicate-modal">
     <div class="modal-header">
-        <h2>Replicar Versão Final</h2>
+        <h2>Replicar Versões</h2>
         <button class="close-modal" onclick="toggleReplicateModal()">X</button>
     </div>
     <div class="modal-body">
-        <div id="replicate-options"></div>
+        <div id="replicate-options" class="application-checkboxes"></div>
+        <div id="client-selection" class="client-checkboxes"></div>
     </div>
     <div class="modal-footer">
         <button class="botao" onclick="confirmReplication()">Replicar</button>
@@ -593,7 +641,6 @@
                     <td class="actions edit-column">
                         <button class="botao edit-button" onclick="updateVersion('${app}', 'current')">Editar Atual</button>
                         <button class="botao edit-button" onclick="updateVersion('${app}', 'final')">Editar Final</button>
-                        <button class="botao replicate-button" onclick="toggleReplicateModal('${app}')">Replicar</button>
                     </td>
                 `;
                 tbody.appendChild(row);
@@ -601,6 +648,17 @@
             table.appendChild(tbody);
             clientContent.appendChild(table);
             tabContentsContainer.appendChild(clientContent);
+
+            // Adicionar botão de replicar ao lado do primeiro botão "Editar Final"
+            const firstEditFinalButton = clientContent.querySelector('.edit-button:nth-of-type(2)');
+            if (firstEditFinalButton) {
+                const replicateButton = document.createElement('button');
+                replicateButton.textContent = 'Replicar';
+                replicateButton.classList.add('botao', 'replicate-button');
+                replicateButton.style.display = 'none';
+                replicateButton.onclick = () => toggleReplicateModal();
+                firstEditFinalButton.parentElement.appendChild(replicateButton);
+            }
 
             // Adicionar campo de texto abaixo da tabela de versões
             const textInput = document.createElement('textarea');
@@ -618,18 +676,21 @@
                 saveTextInput(textInput.value); // Chama a função para salvar o texto digitado
             };
             tabContentsContainer.appendChild(saveButton);
+
+            // Exibir a opção de habilitar edição
+            document.getElementById('edit-options-container').style.display = 'flex';
         }
 
         document.getElementById('empty-state').style.display = 'none'; // Oculta o estado vazio quando há clientes
         toggleButtons(false); // Desabilitar edição inicialmente
     }
 
-    function toggleReplicateModal(appName) {
+    function toggleReplicateModal() {
         const modal = document.getElementById('replicate-modal');
         modal.classList.toggle('active');
         if (modal.classList.contains('active')) {
-            const replicateOptionsContainer = document.getElementById('replicate-options');
-            replicateOptionsContainer.innerHTML = '';
+            const clientSelectionContainer = document.getElementById('client-selection');
+            clientSelectionContainer.innerHTML = '';
             clients.forEach((client, index) => {
                 if (index !== currentClientIndex) { // Excluir o cliente atual da lista
                     const option = document.createElement('div');
@@ -638,18 +699,35 @@
                         <input type="checkbox" id="client-${index}" value="${index}">
                         <label for="client-${index}">${client.name}</label>
                     `;
-                    replicateOptionsContainer.appendChild(option);
+                    clientSelectionContainer.appendChild(option);
                 }
             });
-            replicateAppName = appName;
+
+            const replicateOptionsContainer = document.getElementById('replicate-options');
+            replicateOptionsContainer.innerHTML = '';
+            const client = clients[currentClientIndex];
+            Object.keys(client.versions).forEach(app => {
+                const option = document.createElement('div');
+                option.classList.add('checkbox');
+                option.innerHTML = `
+                    <input type="checkbox" id="app-${app}" value="${app}">
+                    <label for="app-${app}">${app}</label>
+                `;
+                replicateOptionsContainer.appendChild(option);
+            });
         }
     }
 
     function confirmReplication() {
-        const checkboxes = document.querySelectorAll('#replicate-options input[type="checkbox"]:checked');
-        const selectedClients = Array.from(checkboxes).map(cb => parseInt(cb.value));
+        const selectedClientsCheckboxes = document.querySelectorAll('#client-selection input[type="checkbox"]:checked');
+        const selectedClients = Array.from(selectedClientsCheckboxes).map(cb => parseInt(cb.value));
+        const selectedAppsCheckboxes = document.querySelectorAll('#replicate-options input[type="checkbox"]:checked');
+        const selectedApps = Array.from(selectedAppsCheckboxes).map(cb => cb.value);
+
         selectedClients.forEach(clientIndex => {
-            clients[clientIndex].versions[replicateAppName].final = clients[currentClientIndex].versions[replicateAppName].final;
+            selectedApps.forEach(appName => {
+                clients[clientIndex].versions[appName].final = clients[currentClientIndex].versions[appName].final;
+            });
         });
         localStorage.setItem('clients', JSON.stringify(clients));
         toggleReplicateModal();
@@ -662,6 +740,10 @@
         columns.forEach(column => {
             column.style.display = isChecked ? '' : 'none';
         });
+        const replicateButton = document.querySelector('.replicate-button');
+        if (replicateButton) {
+            replicateButton.style.display = isChecked ? 'inline-block' : 'none';
+        }
     }
 
     function saveTextInput(text) {
@@ -717,6 +799,9 @@
 
         const emptyState = document.getElementById('empty-state');
         emptyState.style.display = 'block';
+
+        // Ocultar a opção de habilitar edição
+        document.getElementById('edit-options-container').style.display = 'none';
     }
 
     function closeUpdateForm() {
