@@ -6,36 +6,36 @@
     <title>Página Principal</title>
     <style>
         :root {
-            --font-size: 14px;
-            --modal-width: 90%;
-            --modal-height: 80%;
-            --checkbox-size: 10px;
-            --button-bg-dark: #000;
-            --button-bg-light: #2196f3;
-            --button-color-dark: #fff;
-            --button-color-light: #fff;
-            --background-dark: #222;
-            --background-light: #d0e8f2;
-            --text-dark: #333;
-            --text-light: #fff;
-            --header-bg-dark: #555;
-            --header-bg-light: #2196f3;
-            --header-text-light: #fff;
-            --header-text-dark: #333;
-            --tab-bg-dark: #000;
-            --tab-bg-light: #2196f3;
-            --tab-text-light: #fff;
-            --tab-text-dark: #fff;
-            --client-header-bg-dark: #333;
-            --client-header-bg-light: #e0f7fa;
-            --client-header-border-dark: #666;
-            --client-header-border-light: #ccc;
-            --even-row-bg-dark: #333;
-            --even-row-bg-light: #e0f7fa;
-            --border-color-dark: #666;
-            --border-color-light: #ccc;
-            --hover-border-dark: #ffd700;
-            --hover-border-light: #1e88e5;
+            --font-size: 14px; /* Tamanho da fonte padrão */
+            --modal-width: 90%; /* Largura dos modais */
+            --modal-height: 80%; /* Altura dos modais */
+            --checkbox-size: 10px; /* Tamanho dos checkboxes */
+            --button-bg-dark: #000; /* Cor de fundo dos botões no modo escuro */
+            --button-bg-light: #2196f3; /* Cor de fundo dos botões no modo claro */
+            --button-color-dark: #fff; /* Cor do texto dos botões no modo escuro */
+            --button-color-light: #fff; /* Cor do texto dos botões no modo claro */
+            --background-dark: #222; /* Cor de fundo do corpo no modo escuro */
+            --background-light: #d0e8f2; /* Cor de fundo do corpo no modo claro */
+            --text-dark: #333; /* Cor do texto no modo claro */
+            --text-light: #fff; /* Cor do texto no modo escuro */
+            --header-bg-dark: #555; /* Cor de fundo do cabeçalho no modo escuro */
+            --header-bg-light: #2196f3; /* Cor de fundo do cabeçalho no modo claro */
+            --header-text-light: #fff; /* Cor do texto do cabeçalho no modo claro */
+            --header-text-dark: #333; /* Cor do texto do cabeçalho no modo escuro */
+            --tab-bg-dark: #000; /* Cor de fundo das abas no modo escuro */
+            --tab-bg-light: #2196f3; /* Cor de fundo das abas no modo claro */
+            --tab-text-light: #fff; /* Cor do texto das abas no modo claro */
+            --tab-text-dark: #fff; /* Cor do texto das abas no modo escuro */
+            --client-header-bg-dark: #333; /* Cor de fundo do cabeçalho dos clientes no modo escuro */
+            --client-header-bg-light: #e0f7fa; /* Cor de fundo do cabeçalho dos clientes no modo claro */
+            --client-header-border-dark: #666; /* Cor da borda do cabeçalho dos clientes no modo escuro */
+            --client-header-border-light: #ccc; /* Cor da borda do cabeçalho dos clientes no modo claro */
+            --even-row-bg-dark: #333; /* Cor de fundo das linhas pares no modo escuro */
+            --even-row-bg-light: #e0f7fa; /* Cor de fundo das linhas pares no modo claro */
+            --border-color-dark: #666; /* Cor das bordas no modo escuro */
+            --border-color-light: #ccc; /* Cor das bordas no modo claro */
+            --hover-border-dark: #ffd700; /* Cor das bordas ao passar o mouse no modo escuro */
+            --hover-border-light: #1e88e5; /* Cor das bordas ao passar o mouse no modo claro */
         }
 
         body {
@@ -145,13 +145,21 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: var(--font-size);
-            border: 1px solid transparent;
-            transition: border-color 0.3s ease-in-out;
+            border: 1px solid var(--border-color-dark);
+            transition: border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
             text-align: center;
         }
 
+.tab:hover {
+    border-color: var(--hover-border-dark);
+}
+
+/* Modo Claro */
+body.light-mode .tab:hover {
+    border-color: var(--hover-border-light);
+}
         .tab.selected {
-            background-color: #9c9c9c;
+            background-color: #fff;
             color: #333;
         }
 
@@ -290,6 +298,21 @@
             border-color: var(--hover-border-dark);
         }
 
+        .botao:focus,
+        .add-client-button:focus,
+        .save-button:focus,
+        .xml-buttons-top button:focus {
+            outline: none;
+            border-color: var(--hover-border-dark);
+        }
+
+        .botao.selected,
+        .add-client-button.selected,
+        .save-button.selected,
+        .xml-buttons-top button.selected {
+            background-color: #fff;
+        }
+
         .edit-button,
         .replicate-button {
             background-color: var(--button-bg-dark);
@@ -337,7 +360,7 @@
 
         .add-client-button:hover {
             background-color: var(--button-bg-dark);
-            color: var(--button-color-dark);
+            color: var (--button-color-dark);
         }
 
         .save-button {
@@ -549,12 +572,14 @@
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
 
-        .tab-secondary:hover {
-            border-color: var(--hover-border-dark);
-        }
+ .tab-secondary:hover {
+    border-color: var(--hover-border-dark);
+    background-color: var(--tab-bg-dark); /* Mantém o fundo no modo escuro */
+    color: var(--tab-text-dark); /* Mantém o texto no modo escuro */
+}
 
         .tab-secondary.active {
-            background-color: #e0f7fa;
+            background-color: var(--client-header-bg-light);
             color:#000;
             border-color: var(--hover-border-dark);
         }
@@ -588,18 +613,24 @@
             margin-top: 10px;
             padding: 10px 20px;
             background-color: var(--button-bg-dark);
-            color: var(--button-color-dark);
-            border: 1px solid var(--border-color-dark);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
+			color: var(--button-color-dark);
+			border: 1px solid var(--border-color-dark);
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.button-secondary:hover {
+    background-color: var(--button-bg-dark); /* Mantém a cor de fundo no modo escuro */
+    color: var(--button-color-dark); /* Mantém a cor do texto no modo escuro */
+    border-color: var(--hover-border-dark); /* Altera apenas a cor da borda para dourado */
+}
 
-        .button-secondary:hover {
-            background-color: var(--button-bg-light);
-            color: var(--button-color-light);
-            border-color: var(--hover-border-dark);
-        }
+/* Modo Claro */
+body.light-mode .button-secondary:hover {
+    background-color: var(--button-bg-light); /* Cor de fundo no modo claro */
+    color: var(--button-color-light); /* Cor do texto no modo claro */
+    border-color: var(--hover-border-light); /* Borda no modo claro */
+}
     </style>
 </head>
 <body>
@@ -1131,12 +1162,21 @@
 
     function toggleMode() {
         const root = document.documentElement;
+		const body = document.body;
         const currentBgColor = getComputedStyle(root).getPropertyValue('--background-dark').trim();
 
+if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+    } else {
+        body.classList.add('light-mode');
+    }
         if (currentBgColor === '#222') {
             root.style.setProperty('--background-dark', '#d0e8f2');
-            root.style.setProperty('--text-light', '#333'); // Text color for light mode
+            root.style.setProperty('--text-light', '#333');
             root.style.setProperty('--button-bg-dark', '#2196f3');
+            root.style.setProperty('--button-bg-light', '#2196f3');
+            root.style.setProperty('--button-color-dark', '#fff');
+            root.style.setProperty('--button-color-light', '#fff');
             root.style.setProperty('--header-bg-dark', '#2196f3');
             root.style.setProperty('--header-text-light', '#fff');
             root.style.setProperty('--client-header-bg-dark', '#e0f7fa');
@@ -1148,8 +1188,11 @@
             root.style.setProperty('--hover-border-dark', '#1e88e5');
         } else {
             root.style.setProperty('--background-dark', '#222');
-            root.style.setProperty('--text-light', '#fff'); // Text color for dark mode
+            root.style.setProperty('--text-light', '#fff');
             root.style.setProperty('--button-bg-dark', '#000');
+            root.style.setProperty('--button-bg-light', '#2196f3');
+            root.style.setProperty('--button-color-dark', '#fff');
+            root.style.setProperty('--button-color-light', '#fff');
             root.style.setProperty('--header-bg-dark', '#555');
             root.style.setProperty('--header-text-light', '#fff');
             root.style.setProperty('--client-header-bg-dark', '#333');
@@ -1161,14 +1204,12 @@
             root.style.setProperty('--hover-border-dark', '#ffd700');
         }
 
-        // Alterna os estilos dos botões
-        document.querySelectorAll('.botao, .add-client-button, .save-button, .xml-buttons-top button, .close-modal').forEach(button => {
+        document.querySelectorAll('.botao, .add-client-button, .save-button, .xml-buttons-top button').forEach(button => {
             button.style.backgroundColor = getComputedStyle(root).getPropertyValue('--button-bg-dark');
             button.style.color = getComputedStyle(root).getPropertyValue('--button-color-dark');
             button.style.borderColor = getComputedStyle(root).getPropertyValue('--border-color-dark');
         });
 
-        // Alterna os estilos do texto
         document.querySelectorAll('th, td, .client-header h2').forEach(text => {
             text.style.color = getComputedStyle(root).getPropertyValue('--text-light');
             text.style.borderColor = getComputedStyle(root).getPropertyValue('--border-color-dark');
